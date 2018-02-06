@@ -1,9 +1,12 @@
 package com.willbrom.forismaticquotes;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.PersistableBundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.saeid.fabloading.LoadingView;
 
 public class MainActivity extends AppCompatActivity implements NetworkUtils.VollyCallbackListener {
 
@@ -24,15 +28,26 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
     private static final String QUOTE_KEY = "quote_key";
     private static final String QUOTE_AUTHOR_KEY = "quote_author_key";
     private ArrayList<String> quoteData = new ArrayList<>();
-    @BindView(R.id.title_textView) TextView titleTextView;
-    @BindView(R.id.quoteText_textView) TextView quoteTextView;
-    @BindView(R.id.quoteAuthor_textView) TextView quoteAuthorTextView;
+    @BindView(R.id.title_textView)
+    TextView titleTextView;
+    @BindView(R.id.quoteText_textView)
+    TextView quoteTextView;
+    @BindView(R.id.quoteAuthor_textView)
+    TextView quoteAuthorTextView;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.quote_cardView)
+    CardView quoteCardView;
+    @BindView(R.id.loading_view)
+    LoadingView loadingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        loadingView.addAnimation(Color.parseColor("#4CAF50"), 1, LoadingView.FROM_TOP);
 
         quoteTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Merienda-Bold.ttf"));
         quoteAuthorTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Rancho-Regular.ttf"));
@@ -42,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
             quoteTextView.setText(savedInstanceState.getString(QUOTE_KEY));
             quoteAuthorTextView.setText(savedInstanceState.getString(QUOTE_AUTHOR_KEY));
         }
+
+
     }
 
     @Override
