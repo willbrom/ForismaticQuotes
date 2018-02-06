@@ -16,6 +16,7 @@ public class JsonUtils {
             quoteData.add(jsonObject.getString("quoteAuthor"));
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
         }
         return quoteData;
     }
