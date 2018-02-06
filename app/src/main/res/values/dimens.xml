@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- textView dimen's -->
+    <dimen name="title_text_size">42sp</dimen>
+    <dimen name="quote_text_size">22sp</dimen>
+    <dimen name="quote_author_text_size">18sp</dimen>
+    <dimen name="textView_padding">6dp</dimen>
+
+    <dimen name="cardView_side_margin">12dp</dimen>
+</resources>
