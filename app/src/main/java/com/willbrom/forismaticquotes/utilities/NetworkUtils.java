@@ -32,6 +32,9 @@ public class NetworkUtils {
     private static final String FORMAT_QUERY_VALUE_JSON = "json";
     private static final String LANG_QUERY_VALUE_EN = "en";
 
+    private static RequestQueue requestQueue;
+    private static StringRequest request;
+    
     public static URL getQuoteUrl(String keyQueryValue) {
         Uri uri = Uri.parse(BASE_URL).buildUpon()
                 .appendQueryParameter(METHOD_QUERY_KEY, METHOD_QUERY_VALUE)
@@ -50,10 +53,11 @@ public class NetworkUtils {
     }
 
     public static void getHttpResponse(Context context, final VollyCallbackListener callbackListener, URL url) {
-        final RequestQueue requestQueue = Volley.newRequestQueue(context);
+        if (requestQueue == null) 
+            requestQueue = Volley.newRequestQueue(context);
+        
         String urlToString = url.toString();
-
-        StringRequest request = new StringRequest(Request.Method.GET, urlToString, new Response.Listener<String>() {
+        request = new StringRequest(Request.Method.GET, urlToString, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 callbackListener.onSuccess(response);
