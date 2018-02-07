@@ -8,7 +8,7 @@
 
     <!-- fab dimen's -->
     <dimen name="fab_edge_margin">16dp</dimen>
-    <dimen name="fab_elevation">6dp</dimen>
+    <dimen name="fab_elevation">2dp</dimen>
     <dimen name="fab_pressed_elevation">12dp</dimen>
 
     <!-- card dimen's -->

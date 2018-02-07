@@ -80,31 +80,30 @@
             <!--app:layout_constraintBottom_toBottomOf="parent"-->
             <!--android:visibility="invisible" />-->
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/ic_arrow_forward_black_24dp"
-            app:elevation="@dimen/fab_elevation"
-            android:onClick="onClickNextQuote"
-            app:pressedTranslationZ="@dimen/fab_pressed_elevation"
+        <com.github.jorgecastilloprz.FABProgressCircle
+            android:id="@+id/fab_progressCircle"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            app:arcColor="#db6a32ed"
+            app:arcWidth="2dp"
+            app:roundedStroke="true"
             android:layout_marginBottom="@dimen/fab_edge_margin"
             android:layout_marginRight="@dimen/fab_edge_margin"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="invisible"/>
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <io.saeid.fabloading.LoadingView
-            android:id="@+id/loading_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:elevation="@dimen/fab_elevation"
-            android:onClick="onClickNextQuote"
-            app:pressedTranslationZ="@dimen/fab_pressed_elevation"
-            android:layout_marginBottom="@dimen/fab_edge_margin"
-            android:layout_marginRight="@dimen/fab_edge_margin"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                app:rippleColor="#88d96b27"
+                android:src="@drawable/ic_arrow_forward_black_24dp"
+                app:elevation="@dimen/fab_elevation"
+                app:borderWidth="0dp"
+                android:onClick="onClickNextQuote"
+                app:pressedTranslationZ="0dp" />
+
+        </com.github.jorgecastilloprz.FABProgressCircle>
 
     </android.support.constraint.ConstraintLayout>
 

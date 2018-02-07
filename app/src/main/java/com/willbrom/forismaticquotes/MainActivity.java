@@ -1,8 +1,6 @@
 package com.willbrom.forismaticquotes;
 
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.jorgecastilloprz.FABProgressCircle;
 import com.willbrom.forismaticquotes.utilities.JsonUtils;
 import com.willbrom.forismaticquotes.utilities.NetworkUtils;
 
@@ -20,13 +19,14 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.saeid.fabloading.LoadingView;
+
 
 public class MainActivity extends AppCompatActivity implements NetworkUtils.VollyCallbackListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String QUOTE_KEY = "quote_key";
     private static final String QUOTE_AUTHOR_KEY = "quote_author_key";
+    private static final String  DATA_RECEIVED_KEY = "data_received_key";
     private ArrayList<String> quoteData = new ArrayList<>();
     @BindView(R.id.title_textView)
     TextView titleTextView;
@@ -38,16 +38,15 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
     FloatingActionButton fab;
     @BindView(R.id.quote_cardView)
     CardView quoteCardView;
-    @BindView(R.id.loading_view)
-    LoadingView loadingView;
+    @BindView(R.id.fab_progressCircle)
+    FABProgressCircle fabProgressCircle;
+    private boolean dataReceived = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        loadingView.addAnimation(Color.parseColor("#4CAF50"), 1, LoadingView.FROM_TOP);
 
         quoteTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Merienda-Bold.ttf"));
         quoteAuthorTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Rancho-Regular.ttf"));
@@ -56,19 +55,31 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
         if (savedInstanceState != null) {
             quoteTextView.setText(savedInstanceState.getString(QUOTE_KEY));
             quoteAuthorTextView.setText(savedInstanceState.getString(QUOTE_AUTHOR_KEY));
+            dataReceived = savedInstanceState.getBoolean(DATA_RECEIVED_KEY);
         }
+    }
 
-
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            if (dataReceived)
+                fabProgressCircle.clearFocus();
+            else
+                fabProgressCircle.show();
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString(QUOTE_KEY, quoteTextView.getText().toString());
         outState.putString(QUOTE_AUTHOR_KEY, quoteAuthorTextView.getText().toString());
+        outState.putBoolean(DATA_RECEIVED_KEY, dataReceived);
         super.onSaveInstanceState(outState);
     }
 
     public void onClickNextQuote(View view) {
+        fab.setEnabled(false);
+        fabProgressCircle.show();
         URL url = NetworkUtils.getQuoteUrl("");
         NetworkUtils.getHttpResponse(this, this, url);
         Log.d(TAG, url.toString());
@@ -86,12 +97,19 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
 
     @Override
     public void onSuccess(String response) {
+        fab.setEnabled(true);
+        dataReceived = true;
+        fabProgressCircle.hide();
         quoteData = JsonUtils.parseJson(response);
         displayQuote();
     }
 
     @Override
     public void onFailure(String error) {
+        dataReceived = false;
+        fabProgressCircle.hide();
+        fab.setEnabled(true);
+
         Toast.makeText(this, "this is the error " + error, Toast.LENGTH_SHORT).show();
     }
 }
