@@ -1,8 +1,15 @@
 package com.willbrom.forismaticquotes.data;
 
-/**
- * Created by user on 2/7/2018.
- */
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
+
+@Entity
 public class Quote {
+    @PrimaryKey
+    public int id;
+
+    public String quoteText;
+    public String quoteAuthor;
 }

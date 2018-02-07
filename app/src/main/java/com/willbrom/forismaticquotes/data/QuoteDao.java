@@ -1,8 +1,22 @@
 package com.willbrom.forismaticquotes.data;
 
-/**
- * Created by user on 2/7/2018.
- */
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
 
-public class QuoteDao {
+import java.util.List;
+
+
+@Dao
+public interface QuoteDao {
+
+    @Query("SELECT * FROM Quote")
+    List<Quote> getAll();
+
+    @Insert
+    void insertAll(Quote... quotes);
+
+    @Delete
+    void delete(Quote quote);
 }

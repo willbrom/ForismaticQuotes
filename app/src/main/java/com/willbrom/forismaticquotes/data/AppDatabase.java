@@ -1,8 +1,11 @@
 package com.willbrom.forismaticquotes.data;
 
-/**
- * Created by user on 2/7/2018.
- */
 
-public class AppDatabase {
+import android.arch.persistence.room.Database;
+import android.arch.persistence.room.RoomDatabase;
+
+
+@Database(entities = {Quote.class}, version = 1)
+public abstract class AppDatabase extends RoomDatabase {
+    public abstract QuoteDao quoteDao();
 }
