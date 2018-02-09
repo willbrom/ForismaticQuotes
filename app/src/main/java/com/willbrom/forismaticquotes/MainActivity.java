@@ -14,14 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
-import com.willbrom.forismaticquotes.data.AppDatabase;
+import com.willbrom.forismaticquotes.data.QuoteDatabase;
 import com.willbrom.forismaticquotes.data.Quote;
 import com.willbrom.forismaticquotes.utilities.JsonUtils;
 import com.willbrom.forismaticquotes.utilities.NetworkUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,9 +51,6 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
     @BindView(R.id.textView)
     TextView textView;
     private boolean dataReceived = true;
-    private AppDatabase db;
-    private Quote quote;
-    private int id = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +68,11 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
             dataReceived = savedInstanceState.getBoolean(DATA_RECEIVED_KEY);
         }
 
-        quote = new Quote();
-        db = Room.databaseBuilder(this, AppDatabase.class, "quote-database").build();
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showData = true;
-                new DbAsyncTask().execute(quote);
+                new DbAsyncTask().execute();
             }
         });
     }
@@ -112,12 +105,8 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
 
     private void displayQuote() {
         if (quoteData != null) {
-            quote.id = id;
-            quote.quoteText = quoteData.get(0);
-            quote.quoteAuthor = quoteData.get(1);
-            id++;
 
-            new DbAsyncTask().execute(quote);
+            new DbAsyncTask().execute(new Quote(quoteTextView.getText().toString(), quoteAuthorTextView.getText().toString()));
 
             quoteTextView.setText(quoteData.get(0));
             if (!quoteData.get(1).equals(""))
@@ -150,11 +139,13 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
         @Override
         protected Void doInBackground(Quote... quotes) {
             if (MainActivity.showData) {
-                for (int i = 0; i < db.quoteDao().getAll().size(); i++) {
-                    data += db.quoteDao().getAll().get(i).quoteText;
+                for (int i = 0; i < QuoteDatabase.getInstance(getApplicationContext()).getQuoteDao().getAllQuotes().size(); i++) {
+                    data += QuoteDatabase.getInstance(getApplicationContext())
+                            .getQuoteDao()
+                            .getAllQuotes().get(i).quoteText;
                 }
             } else
-                db.quoteDao().insertAll(quote);
+                QuoteDatabase.getInstance(getApplicationContext()).getQuoteDao().insert(quotes[0]);
 
             return null;
         }

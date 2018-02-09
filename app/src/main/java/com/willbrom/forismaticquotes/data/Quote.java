@@ -7,9 +7,13 @@ import android.arch.persistence.room.PrimaryKey;
 
 @Entity
 public class Quote {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int id;
+    public final String quoteText;
+    public final String quoteAuthor;
 
-    public String quoteText;
-    public String quoteAuthor;
+    public Quote(String quoteText, String quoteAuthor) {
+        this.quoteText = quoteText;
+        this.quoteAuthor = quoteAuthor;
+    }
 }

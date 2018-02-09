@@ -12,10 +12,10 @@ import java.util.List;
 public interface QuoteDao {
 
     @Query("SELECT * FROM Quote")
-    List<Quote> getAll();
+    List<Quote> getAllQuotes();
 
     @Insert
-    void insertAll(Quote... quotes);
+    void insert(Quote... quotes);
 
     @Delete
     void delete(Quote quote);
