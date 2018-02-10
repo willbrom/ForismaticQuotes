@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
     Button button;
     @BindView(R.id.textView)
     TextView textView;
+    @BindView(R.id.favorite_imageView)
+    TextView favroiteBtn;
     private boolean dataReceived = true;
 
     @Override
@@ -131,6 +133,10 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
         fabProgressCircle.hide();
         fab.setEnabled(true);
         Toast.makeText(this, "this is the error " + error, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onClickFavorite(View view) {
+
     }
 
     public class DbAsyncTask extends AsyncTask<Quote, Void ,Void> {

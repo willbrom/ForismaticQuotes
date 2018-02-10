@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Forismatic Quote\'s</string>
     <string name="quote_title">Quote\'s</string>
-    <string name="quote_text">No matter how deep a study you make. What you really have to rely on is your own intuition and when it comes down to it, you really don\'t know whats going to happen until you do it. No matter how deep a study you make. What you really have to rely on is your own intuition and when it comes down to it, you really don\'t know whats going to happen until you do it. No matter how deep a study you make. What you really have to rely on is your own intuition and when it comes down to it, you really don\'t know whats going to happen until you do it. No matter how deep a study you make. What you really have to rely on is your own intuition and when it comes down to it, you really don\'t know whats going to happen until you do it. No matter how deep a study you make. What you really have to rely on is your own intuition and when it comes down to it, you really don\'t know whats going to happen until you do it.</string>
+    <string name="quote_text">No matter how deep a study you make. What you really have to rely on is your own intuition and when it comes down to it, you really don\'t know whats going to happen until you do it.</string>
     <string name="quote_author">Konosuke Matsushita</string>
     <string name="next_quote">Next Quote</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
