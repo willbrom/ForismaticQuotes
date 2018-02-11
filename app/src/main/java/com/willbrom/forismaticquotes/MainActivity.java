@@ -1,11 +1,15 @@
 package com.willbrom.forismaticquotes;
 
-import android.arch.persistence.room.Room;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -13,26 +17,26 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
-import com.squareup.picasso.Picasso;
 import com.willbrom.forismaticquotes.data.QuoteDatabase;
 import com.willbrom.forismaticquotes.data.Quote;
+import com.willbrom.forismaticquotes.fragments.MainFragment;
+import com.willbrom.forismaticquotes.fragments.BlankFragment2;
 import com.willbrom.forismaticquotes.utilities.JsonUtils;
 import com.willbrom.forismaticquotes.utilities.NetworkUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MainActivity extends AppCompatActivity implements NetworkUtils.VollyCallbackListener {
+public class MainActivity extends AppCompatActivity implements NetworkUtils.VollyCallbackListener, MainFragment.OnFragmentInteractionListener, BlankFragment2.OnFragmentInteractionListener2 {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String QUOTE_KEY = "quote_key";
@@ -40,26 +44,15 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
     private static final String  DATA_RECEIVED_KEY = "data_received_key";
     private static boolean showData;
     private ArrayList<String> quoteData = new ArrayList<>();
-    @BindView(R.id.title_textView)
-    TextView titleTextView;
-    @BindView(R.id.quoteText_textView)
-    TextView quoteTextView;
-    @BindView(R.id.quoteAuthor_textView)
-    TextView quoteAuthorTextView;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-    @BindView(R.id.favorite_fab)
-    FloatingActionButton favFab;
-    @BindView(R.id.quote_cardView)
-    CardView quoteCardView;
-    @BindView(R.id.fab_progressCircle)
-    FABProgressCircle fabProgressCircle;
-    @BindView(R.id.fab_fav_progressCircle)
-    FABProgressCircle fabFavProgressCircle;
+
     @BindView(R.id.parent)
     CoordinatorLayout parentViewGroup;
     @BindView(R.id.toolBar)
     Toolbar toolbar;
+    @BindView(R.id.tab)
+    TabLayout tabLayout;
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
     private boolean dataReceived = true;
 
     @Override
@@ -68,34 +61,39 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        quoteTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Merienda-Bold.ttf"));
-        quoteAuthorTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Rancho-Regular.ttf"));
-        titleTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/AmaticSC-Bold.ttf"));
+//        if (savedInstanceState != null) {
+//            quoteTextView.setText(savedInstanceState.getString(QUOTE_KEY));
+//            quoteAuthorTextView.setText(savedInstanceState.getString(QUOTE_AUTHOR_KEY));
+//            dataReceived = savedInstanceState.getBoolean(DATA_RECEIVED_KEY);
+//        }
 
-        if (savedInstanceState != null) {
-            quoteTextView.setText(savedInstanceState.getString(QUOTE_KEY));
-            quoteAuthorTextView.setText(savedInstanceState.getString(QUOTE_AUTHOR_KEY));
-            dataReceived = savedInstanceState.getBoolean(DATA_RECEIVED_KEY);
-        }
-
+        setCustomFonts();
         setSupportActionBar(toolbar);
+        setupViewHolder(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void setCustomFonts() {
+//        quoteTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Merienda-Bold.ttf"));
+//        quoteAuthorTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Rancho-Regular.ttf"));
+//        titleTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/AmaticSC-Bold.ttf"));
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        if (hasFocus) {
-            if (dataReceived)
-                fabProgressCircle.clearFocus();
-            else
-                fabProgressCircle.show();
-        }
+//        if (hasFocus) {
+//            if (dataReceived)
+//                fabProgressCircle.clearFocus();
+//            else
+//                fabProgressCircle.show();
+//        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(QUOTE_KEY, quoteTextView.getText().toString());
-        outState.putString(QUOTE_AUTHOR_KEY, quoteAuthorTextView.getText().toString());
-        outState.putBoolean(DATA_RECEIVED_KEY, dataReceived);
+//        outState.putString(QUOTE_KEY, quoteTextView.getText().toString());
+//        outState.putString(QUOTE_AUTHOR_KEY, quoteAuthorTextView.getText().toString());
+//        outState.putBoolean(DATA_RECEIVED_KEY, dataReceived);
         super.onSaveInstanceState(outState);
     }
 
@@ -103,6 +101,13 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    private void setupViewHolder(ViewPager viewPager) {
+        ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new MainFragment(), "One");
+        adapter.addFragment(new BlankFragment2(), "Two");
+        viewPager.setAdapter(adapter);
     }
 
     public void onClickNextQuote(View view) {
@@ -138,6 +143,40 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
         fabProgressCircle.hide();
         fab.setEnabled(true);
         Toast.makeText(this, "this is the error " + error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    class ViewpagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> fragmentList = new ArrayList<>();
+        private final List<String> fragmentListTitle = new ArrayList<>();
+
+        public ViewpagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentListTitle.get(position);
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            fragmentList.add(fragment);
+            fragmentListTitle.add(title);
+        }
     }
 
     public void onClickFavorite(View view) {

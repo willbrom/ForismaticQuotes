@@ -1,0 +1,106 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.willbrom.forismaticquotes.fragments.MainFragment"
+    android:id="@+id/parentView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context="com.willbrom.forismaticquotes.fragments.MainFragment"
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/c"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="12dp">
+
+            <TextView
+                android:id="@+id/title_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/quote_title"
+                android:textSize="@dimen/title_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/quote_cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/cardview_default_elevation"
+                app:cardCornerRadius="@dimen/cardview_default_radius"
+                android:layout_marginLeft="@dimen/cardView_side_margin"
+                android:layout_marginRight="@dimen/cardView_side_margin"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title_textView"
+                app:layout_constraintVertical_bias="0.157">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:id="@+id/quoteText_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/textView_padding"
+                        android:paddingRight="@dimen/textView_padding"
+                        android:textSize="@dimen/quote_text_size"
+                        tools:text="@string/quote_text" />
+
+                    <TextView
+                        android:id="@+id/quoteAuthor_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:paddingLeft="@dimen/textView_padding"
+                        android:paddingRight="@dimen/textView_padding"
+                        android:textSize="@dimen/quote_author_text_size"
+                        tools:text="@string/quote_author" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <com.github.jorgecastilloprz.FABProgressCircle
+        android:id="@+id/fab_progressCircle"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        app:arcColor="#db6a32ed"
+        app:arcWidth="2dp"
+        app:roundedStroke="true"
+        android:layout_marginBottom="@dimen/fab_edge_margin"
+        android:layout_marginRight="@dimen/fab_edge_margin"
+        android:layout_gravity="bottom|right">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:rippleColor="#88d96b27"
+        app:srcCompat="@drawable/ic_arrow_forward_black_24dp"
+        app:elevation="@dimen/fab_elevation"
+        app:borderWidth="0dp"
+        app:pressedTranslationZ="0dp" />
+
+    </com.github.jorgecastilloprz.FABProgressCircle>
+
+</FrameLayout>
