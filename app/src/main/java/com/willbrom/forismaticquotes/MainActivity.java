@@ -3,17 +3,23 @@ package com.willbrom.forismaticquotes;
 import android.arch.persistence.room.Room;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
+import com.squareup.picasso.Picasso;
 import com.willbrom.forismaticquotes.data.QuoteDatabase;
 import com.willbrom.forismaticquotes.data.Quote;
 import com.willbrom.forismaticquotes.utilities.JsonUtils;
@@ -42,16 +48,18 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
     TextView quoteAuthorTextView;
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    @BindView(R.id.favorite_fab)
+    FloatingActionButton favFab;
     @BindView(R.id.quote_cardView)
     CardView quoteCardView;
     @BindView(R.id.fab_progressCircle)
     FABProgressCircle fabProgressCircle;
-    @BindView(R.id.button)
-    Button button;
-    @BindView(R.id.textView)
-    TextView textView;
-    @BindView(R.id.favorite_imageView)
-    TextView favroiteBtn;
+    @BindView(R.id.fab_fav_progressCircle)
+    FABProgressCircle fabFavProgressCircle;
+    @BindView(R.id.parent)
+    CoordinatorLayout parentViewGroup;
+    @BindView(R.id.toolBar)
+    Toolbar toolbar;
     private boolean dataReceived = true;
 
     @Override
@@ -70,13 +78,7 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
             dataReceived = savedInstanceState.getBoolean(DATA_RECEIVED_KEY);
         }
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showData = true;
-                new DbAsyncTask().execute();
-            }
-        });
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -97,6 +99,12 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
     public void onClickNextQuote(View view) {
         fab.setEnabled(false);
         fabProgressCircle.show();
@@ -107,9 +115,6 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
 
     private void displayQuote() {
         if (quoteData != null) {
-
-            new DbAsyncTask().execute(new Quote(quoteTextView.getText().toString(), quoteAuthorTextView.getText().toString()));
-
             quoteTextView.setText(quoteData.get(0));
             if (!quoteData.get(1).equals(""))
                 quoteAuthorTextView.setText(quoteData.get(1));
@@ -136,32 +141,20 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
     }
 
     public void onClickFavorite(View view) {
-
+        fabFavProgressCircle.show();
+        new DbAsyncTask().execute(new Quote(quoteTextView.getText().toString(), quoteAuthorTextView.getText().toString()));
     }
 
     public class DbAsyncTask extends AsyncTask<Quote, Void ,Void> {
-
-        String data = "";
         @Override
         protected Void doInBackground(Quote... quotes) {
-            if (MainActivity.showData) {
-                for (int i = 0; i < QuoteDatabase.getInstance(getApplicationContext()).getQuoteDao().getAllQuotes().size(); i++) {
-                    data += QuoteDatabase.getInstance(getApplicationContext())
-                            .getQuoteDao()
-                            .getAllQuotes().get(i).quoteText;
-                }
-            } else
-                QuoteDatabase.getInstance(getApplicationContext()).getQuoteDao().insert(quotes[0]);
-
+            QuoteDatabase.getInstance(getApplicationContext()).getQuoteDao().insert(quotes[0]);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if (MainActivity.showData) {
-                textView.setText(data);
-                showData = false;
-            }
+            fabFavProgressCircle.beginFinalAnimation();
         }
     }
 }

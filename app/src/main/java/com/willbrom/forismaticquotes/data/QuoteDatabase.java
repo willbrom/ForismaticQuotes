@@ -11,16 +11,18 @@ import android.content.Context;
 public abstract class QuoteDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "quoteDatabase.db";
-    private static volatile QuoteDatabase instance;
 
-    public static synchronized QuoteDatabase getInstance(Context context) {
-        if (instance == null)
-            instance = create(context);
-        return instance;
+    public static QuoteDatabase getInstance(Context context) {
+        return RoomDatabaseInstance.create(context, DB_NAME);
     }
 
-    private static QuoteDatabase create(final Context context) {
-        return Room.databaseBuilder(context,QuoteDatabase.class,DB_NAME).build();
+    private static class RoomDatabaseInstance {
+        private static QuoteDatabase instance;
+        private static QuoteDatabase create(Context context, String dbName) {
+            if (instance == null)
+                instance = Room.databaseBuilder(context, QuoteDatabase.class, dbName).build();
+            return instance;
+        }
     }
 
     public abstract QuoteDao getQuoteDao();
