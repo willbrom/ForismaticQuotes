@@ -1,10 +1,8 @@
 package com.willbrom.forismaticquotes;
 
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,15 +10,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.jorgecastilloprz.FABProgressCircle;
 import com.willbrom.forismaticquotes.data.QuoteDatabase;
 import com.willbrom.forismaticquotes.data.Quote;
 import com.willbrom.forismaticquotes.fragments.MainFragment;
@@ -36,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MainActivity extends AppCompatActivity implements NetworkUtils.VollyCallbackListener, MainFragment.OnFragmentInteractionListener, BlankFragment2.OnFragmentInteractionListener2 {
+public class MainActivity extends AppCompatActivity implements MainFragment.OnMainFragmentInteractionListener, BlankFragment2.OnFragmentInteractionListener2, NetworkUtils.VollyCallbackListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String QUOTE_KEY = "quote_key";
@@ -110,43 +105,58 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
         viewPager.setAdapter(adapter);
     }
 
-    public void onClickNextQuote(View view) {
-        fab.setEnabled(false);
-        fabProgressCircle.show();
-        URL url = NetworkUtils.getQuoteUrl("");
+//    public void onClickNextQuote(View view) {
+//        fab.setEnabled(false);
+//        fabProgressCircle.show();
+//        URL url = NetworkUtils.getQuoteUrl("");
+//        NetworkUtils.getHttpResponse(this, this, url);
+//        Log.d(TAG, url.toString());
+//    }
+
+//    private void displayQuote() {
+//        if (quoteData != null) {
+//            quoteTextView.setText(quoteData.get(0));
+//            if (!quoteData.get(1).equals(""))
+//                quoteAuthorTextView.setText(quoteData.get(1));
+//            else
+//                quoteAuthorTextView.setText("Unknown");
+//        }
+//    }
+
+//    @Override
+//    public void onSuccess(String response) {
+//        fab.setEnabled(true);
+//        dataReceived = true;
+//        fabProgressCircle.hide();
+//        quoteData = JsonUtils.parseJson(response);
+//        displayQuote();
+//    }
+//
+//    @Override
+//    public void onFailure(String error) {
+//        dataReceived = false;
+//        fabProgressCircle.hide();
+//        fab.setEnabled(true);
+//        Toast.makeText(this, "this is the error " + error, Toast.LENGTH_SHORT).show();
+//    }
+
+    @Override
+    public void onNextButtonFragmentInteraction(URL url) {
         NetworkUtils.getHttpResponse(this, this, url);
-        Log.d(TAG, url.toString());
-    }
-
-    private void displayQuote() {
-        if (quoteData != null) {
-            quoteTextView.setText(quoteData.get(0));
-            if (!quoteData.get(1).equals(""))
-                quoteAuthorTextView.setText(quoteData.get(1));
-            else
-                quoteAuthorTextView.setText("Unknown");
-        }
-    }
-
-    @Override
-    public void onSuccess(String response) {
-        fab.setEnabled(true);
-        dataReceived = true;
-        fabProgressCircle.hide();
-        quoteData = JsonUtils.parseJson(response);
-        displayQuote();
-    }
-
-    @Override
-    public void onFailure(String error) {
-        dataReceived = false;
-        fabProgressCircle.hide();
-        fab.setEnabled(true);
-        Toast.makeText(this, "this is the error " + error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onSuccess(String response) {
+        Log.d(TAG, response);
+    }
+
+    @Override
+    public void onFailure(String error) {
 
     }
 
@@ -179,10 +189,10 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
         }
     }
 
-    public void onClickFavorite(View view) {
-        fabFavProgressCircle.show();
-        new DbAsyncTask().execute(new Quote(quoteTextView.getText().toString(), quoteAuthorTextView.getText().toString()));
-    }
+//    public void onClickFavorite(View view) {
+//        fabFavProgressCircle.show();
+//        new DbAsyncTask().execute(new Quote(quoteTextView.getText().toString(), quoteAuthorTextView.getText().toString()));
+//    }
 
     public class DbAsyncTask extends AsyncTask<Quote, Void ,Void> {
         @Override
@@ -193,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements NetworkUtils.Voll
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            fabFavProgressCircle.beginFinalAnimation();
+//            fabFavProgressCircle.beginFinalAnimation();
         }
     }
 }

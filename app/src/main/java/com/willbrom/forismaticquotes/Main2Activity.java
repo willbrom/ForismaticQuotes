@@ -13,13 +13,14 @@ import android.support.v7.widget.Toolbar;
 import com.willbrom.forismaticquotes.fragments.MainFragment;
 import com.willbrom.forismaticquotes.fragments.BlankFragment2;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class Main2Activity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, BlankFragment2.OnFragmentInteractionListener2 {
+public class Main2Activity extends AppCompatActivity implements MainFragment.OnMainFragmentInteractionListener, BlankFragment2.OnFragmentInteractionListener2 {
 
     @BindView(R.id.toolBar)
     Toolbar toolBar;
@@ -49,6 +50,11 @@ public class Main2Activity extends AppCompatActivity implements MainFragment.OnF
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onNextButtonFragmentInteraction(URL url) {
 
     }
 

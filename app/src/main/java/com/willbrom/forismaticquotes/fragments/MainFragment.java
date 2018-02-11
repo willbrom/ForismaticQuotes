@@ -12,12 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
 import com.willbrom.forismaticquotes.R;
+import com.willbrom.forismaticquotes.utilities.JsonUtils;
 import com.willbrom.forismaticquotes.utilities.NetworkUtils;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,20 +38,18 @@ public class MainFragment extends Fragment implements View.OnClickListener, Netw
     TextView quoteAuthorTextView;
     @BindView(R.id.fab)
     FloatingActionButton fab;
-    @BindView(R.id.favorite_fab)
-    FloatingActionButton favFab;
+//    @BindView(R.id.favorite_fab)
+//    FloatingActionButton favFab;
     @BindView(R.id.quote_cardView)
     CardView quoteCardView;
     @BindView(R.id.fab_progressCircle)
     FABProgressCircle fabProgressCircle;
-    @BindView(R.id.fab_fav_progressCircle)
-    FABProgressCircle fabFavProgressCircle;
 
     private String mParam1;
     private String mParam2;
     private Context context;
 
-    private OnFragmentInteractionListener mListener;
+    private OnMainFragmentInteractionListener mListener;
     private static final String TAG = MainFragment.class.getSimpleName();
 
     public MainFragment() {
@@ -91,17 +92,17 @@ public class MainFragment extends Fragment implements View.OnClickListener, Netw
         titleTextView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/AmaticSC-Bold.ttf"));
     }
 
-    public void onButtonPressed(Uri uri) {
+    public void onNextButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onNextButtonFragmentInteraction(null);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnMainFragmentInteractionListener) {
+            mListener = (OnMainFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener2");
@@ -132,21 +133,34 @@ public class MainFragment extends Fragment implements View.OnClickListener, Netw
         fab.setEnabled(false);
         fabProgressCircle.show();
         URL url = NetworkUtils.getQuoteUrl("");
-        NetworkUtils.getHttpResponse(context, this, url);
-        Log.d(TAG, url.toString());
+        mListener.onNextButtonFragmentInteraction(url);
+    }
+
+    private void displayQuote(ArrayList<String> quoteData) {
+        if (quoteData != null) {
+            quoteTextView.setText(quoteData.get(0));
+            if (!quoteData.get(1).equals(""))
+                quoteAuthorTextView.setText(quoteData.get(1));
+            else
+                quoteAuthorTextView.setText("Unknown");
+        }
     }
 
     @Override
     public void onSuccess(String response) {
-
+        fab.setEnabled(true);
+        fabProgressCircle.hide();
+        displayQuote(JsonUtils.parseJson(response));
     }
 
     @Override
     public void onFailure(String error) {
-
+        fabProgressCircle.hide();
+        fab.setEnabled(true);
+        Toast.makeText(context, "this is the error " + error, Toast.LENGTH_SHORT).show();
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+    public interface OnMainFragmentInteractionListener {
+        void onNextButtonFragmentInteraction(URL url);
     }
 }
