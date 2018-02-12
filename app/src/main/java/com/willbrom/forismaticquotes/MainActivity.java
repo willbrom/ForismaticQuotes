@@ -158,7 +158,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     }
 
     @Override
-    public void onClickQuoteFav(String... quote) {
+    public void onClickQuoteFav(Quote... quote) {
+        new DbAsyncTask().execute(quote);
         Toast.makeText(this, "fav", Toast.LENGTH_SHORT).show();
     }
 
@@ -191,11 +192,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
         }
     }
 
-//    public void onClickFavorite(View view) {
-//        fabFavProgressCircle.show();
-//        new DbAsyncTask().execute(new Quote(quoteTextView.getText().toString(), quoteAuthorTextView.getText().toString()));
-//    }
-
     public class DbAsyncTask extends AsyncTask<Quote, Void ,Void> {
         @Override
         protected Void doInBackground(Quote... quotes) {
@@ -205,7 +201,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
         @Override
         protected void onPostExecute(Void aVoid) {
-//            fabFavProgressCircle.beginFinalAnimation();
         }
     }
 }

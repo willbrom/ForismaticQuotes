@@ -12,8 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.willbrom.forismaticquotes.R;
+import com.willbrom.forismaticquotes.data.Quote;
 
 import java.util.ArrayList;
+import java.util.Queue;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,8 +84,10 @@ public class MainFragment extends Fragment {
 
     @OnClick(R.id.heart)
     void onFavButtonPressed() {
+        String quote = quoteTextView.getText().toString();
+        String quoteAuthor = quoteAuthorTextView.getText().toString();
         if (mListener != null) {
-            mListener.onClickQuoteFav();
+            mListener.onClickQuoteFav(new Quote(quote, quoteAuthor));
         }
     }
 
@@ -121,6 +125,6 @@ public class MainFragment extends Fragment {
     }
 
     public interface OnMainFragmentInteractionListener {
-        void onClickQuoteFav(String... quote);
+        void onClickQuoteFav(Quote... quote);
     }
 }
