@@ -3,6 +3,7 @@ package com.willbrom.forismaticquotes;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
+import com.github.jorgecastilloprz.FABProgressCircle;
 import com.willbrom.forismaticquotes.data.QuoteDatabase;
 import com.willbrom.forismaticquotes.data.Quote;
 import com.willbrom.forismaticquotes.fragments.MainFragment;
@@ -48,7 +50,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     TabLayout tabLayout;
     @BindView(R.id.viewPager)
     ViewPager viewPager;
+    @BindView(R.id.fab_next)
+    FloatingActionButton fabNext;
+    @BindView(R.id.fab_next_progressCircle)
+    FABProgressCircle fabNextProgressCircle;
     private boolean dataReceived = true;
+    private MainFragment mainFragment = new MainFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +69,14 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 //            dataReceived = savedInstanceState.getBoolean(DATA_RECEIVED_KEY);
 //        }
 
-        setCustomFonts();
         setSupportActionBar(toolbar);
         setupViewHolder(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+        setTabIcon();
     }
 
-    private void setCustomFonts() {
-//        quoteTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Merienda-Bold.ttf"));
-//        quoteAuthorTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Rancho-Regular.ttf"));
-//        titleTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/AmaticSC-Bold.ttf"));
+    private void setTabIcon() {
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_favorite_black_24dp);
     }
 
     @Override
@@ -95,69 +100,43 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void setupViewHolder(ViewPager viewPager) {
         ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MainFragment(), "One");
-        adapter.addFragment(new BlankFragment2(), "Two");
+        adapter.addFragment(mainFragment, "One");
+        adapter.addFragment(new BlankFragment2(), "");
         viewPager.setAdapter(adapter);
     }
 
-//    public void onClickNextQuote(View view) {
-//        fab.setEnabled(false);
-//        fabProgressCircle.show();
-//        URL url = NetworkUtils.getQuoteUrl("");
-//        NetworkUtils.getHttpResponse(this, this, url);
-//        Log.d(TAG, url.toString());
-//    }
-
-//    private void displayQuote() {
-//        if (quoteData != null) {
-//            quoteTextView.setText(quoteData.get(0));
-//            if (!quoteData.get(1).equals(""))
-//                quoteAuthorTextView.setText(quoteData.get(1));
-//            else
-//                quoteAuthorTextView.setText("Unknown");
-//        }
-//    }
-
-//    @Override
-//    public void onSuccess(String response) {
-//        fab.setEnabled(true);
-//        dataReceived = true;
-//        fabProgressCircle.hide();
-//        quoteData = JsonUtils.parseJson(response);
-//        displayQuote();
-//    }
-//
-//    @Override
-//    public void onFailure(String error) {
-//        dataReceived = false;
-//        fabProgressCircle.hide();
-//        fab.setEnabled(true);
-//        Toast.makeText(this, "this is the error " + error, Toast.LENGTH_SHORT).show();
-//    }
+    @Override
+    public void onNextButtonFragmentInteraction(URL url) {}
 
     @Override
-    public void onNextButtonFragmentInteraction(URL url) {
+    public void onFragmentInteraction(Uri uri) {}
+
+    public void onClickNextQuote(View view) {
+        fabNext.setEnabled(false);
+        fabNextProgressCircle.show();
+        URL url = NetworkUtils.getQuoteUrl("");
+        Log.d(TAG, url.toString());
         NetworkUtils.getHttpResponse(this, this, url);
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
     public void onSuccess(String response) {
-        Log.d(TAG, response);
+        fabNext.setEnabled(true);
+        fabNextProgressCircle.hide();
+        if (mainFragment != null)
+            mainFragment.displayQuote(JsonUtils.parseJson(response));
     }
 
     @Override
     public void onFailure(String error) {
-
+        fabNextProgressCircle.hide();
+        fabNext.setEnabled(true);
+        Toast.makeText(this, "this is the error " + error, Toast.LENGTH_SHORT).show();
     }
 
     class ViewpagerAdapter extends FragmentPagerAdapter {

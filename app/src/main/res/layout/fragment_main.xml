@@ -89,7 +89,8 @@
         app:roundedStroke="true"
         android:layout_marginBottom="@dimen/fab_edge_margin"
         android:layout_marginRight="@dimen/fab_edge_margin"
-        android:layout_gravity="bottom|right">
+        android:layout_gravity="bottom|right"
+        android:visibility="gone">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

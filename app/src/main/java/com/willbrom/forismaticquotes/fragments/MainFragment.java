@@ -10,14 +10,17 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
+import com.willbrom.forismaticquotes.MainActivity;
 import com.willbrom.forismaticquotes.R;
 import com.willbrom.forismaticquotes.utilities.JsonUtils;
 import com.willbrom.forismaticquotes.utilities.NetworkUtils;
+import com.willbrom.forismaticquotes.utilities.NetworkUtils.VollyCallbackListener;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,8 +28,10 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.willbrom.forismaticquotes.MainActivity.*;
 
-public class MainFragment extends Fragment implements View.OnClickListener, NetworkUtils.VollyCallbackListener {
+
+public class MainFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -80,9 +85,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Netw
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, rootView);
         context = getActivity();
-        fab.setOnClickListener(this);
         setCustomFonts();
-
         return rootView;
     }
 
@@ -121,22 +124,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, Netw
         mListener = null;
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.fab:
-                onClickNextQuote();
-        }
-    }
-
-    private void onClickNextQuote() {
-        fab.setEnabled(false);
-        fabProgressCircle.show();
-        URL url = NetworkUtils.getQuoteUrl("");
-        mListener.onNextButtonFragmentInteraction(url);
-    }
-
-    private void displayQuote(ArrayList<String> quoteData) {
+    public void displayQuote(ArrayList<String> quoteData) {
+        Log.d(TAG, "display Quote");
         if (quoteData != null) {
             quoteTextView.setText(quoteData.get(0));
             if (!quoteData.get(1).equals(""))
@@ -146,19 +135,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Netw
         }
     }
 
-    @Override
-    public void onSuccess(String response) {
-        fab.setEnabled(true);
-        fabProgressCircle.hide();
-        displayQuote(JsonUtils.parseJson(response));
-    }
-
-    @Override
-    public void onFailure(String error) {
-        fabProgressCircle.hide();
-        fab.setEnabled(true);
-        Toast.makeText(context, "this is the error " + error, Toast.LENGTH_SHORT).show();
-    }
 
     public interface OnMainFragmentInteractionListener {
         void onNextButtonFragmentInteraction(URL url);

@@ -2,11 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/fav"
-        android:orderInCategory="1"
-        app:showAsAction="always"
-        android:title="@string/menu_fav"
-        android:icon="@drawable/ic_favorite_black_24dp" />
 
 </menu>
