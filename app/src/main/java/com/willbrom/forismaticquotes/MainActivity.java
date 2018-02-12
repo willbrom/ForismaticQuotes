@@ -2,6 +2,7 @@ package com.willbrom.forismaticquotes;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -15,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
@@ -31,6 +33,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class MainActivity extends AppCompatActivity implements MainFragment.OnMainFragmentInteractionListener, BlankFragment2.OnFragmentInteractionListener2, NetworkUtils.VollyCallbackListener {
@@ -54,8 +57,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     FloatingActionButton fabNext;
     @BindView(R.id.fab_next_progressCircle)
     FABProgressCircle fabNextProgressCircle;
+    @BindView(R.id.heart)
+    ImageView heart;
     private boolean dataReceived = true;
     private MainFragment mainFragment = new MainFragment();
+    private boolean isChecked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     }
 
     private void setTabIcon() {
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_school_black_24dp);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_favorite_black_24dp);
     }
 
@@ -87,6 +94,19 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 //            else
 //                fabProgressCircle.show();
 //        }
+    }
+
+    @OnClick(R.id.heart)
+    void onClickHeart() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            isChecked = !isChecked;
+            final int[] stateSet = {android.R.attr.state_checked * (isChecked ? 1 : -1)};
+            heart.setImageState(stateSet, true);
+        } else {
+            heart.setImageResource(R.drawable.ic_heart_red);
+        }
+
+        Toast.makeText(this, "hohoho", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -105,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     private void setupViewHolder(ViewPager viewPager) {
         ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(mainFragment, "One");
+        adapter.addFragment(mainFragment, "");
         adapter.addFragment(new BlankFragment2(), "");
         viewPager.setAdapter(adapter);
     }
