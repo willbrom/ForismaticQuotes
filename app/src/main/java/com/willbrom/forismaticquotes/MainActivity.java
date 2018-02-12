@@ -1,29 +1,28 @@
 package com.willbrom.forismaticquotes;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
 import com.willbrom.forismaticquotes.data.QuoteDatabase;
 import com.willbrom.forismaticquotes.data.Quote;
 import com.willbrom.forismaticquotes.fragments.MainFragment;
-import com.willbrom.forismaticquotes.fragments.BlankFragment2;
+import com.willbrom.forismaticquotes.fragments.FavoriteFragment;
 import com.willbrom.forismaticquotes.utilities.JsonUtils;
 import com.willbrom.forismaticquotes.utilities.NetworkUtils;
 
@@ -36,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnMainFragmentInteractionListener, BlankFragment2.OnFragmentInteractionListener2, NetworkUtils.VollyCallbackListener {
+public class MainActivity extends AppCompatActivity implements MainFragment.OnMainFragmentInteractionListener, FavoriteFragment.OnFavoriteFragmentInteractionListener, NetworkUtils.VollyCallbackListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String QUOTE_KEY = "quote_key";
@@ -61,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 //    ImageView heart;
     private boolean dataReceived = true;
     private MainFragment mainFragment = new MainFragment();
+    private FavoriteFragment favoriteFragment = new FavoriteFragment();
     private boolean isChecked;
 
     @Override
@@ -126,12 +126,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     private void setupViewHolder(ViewPager viewPager) {
         ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager());
         adapter.addFragment(mainFragment, "");
-        adapter.addFragment(new BlankFragment2(), "");
+        adapter.addFragment(favoriteFragment, "");
         viewPager.setAdapter(adapter);
     }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {}
 
     @OnClick(R.id.fab_next)
     void onClickNextQuote() {
@@ -159,8 +156,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     @Override
     public void onClickQuoteFav(Quote... quote) {
-        new DbAsyncTask().execute(quote);
+        new DbInsertFavAsyncTask().execute(new Pair(this, quote[0]));
         Toast.makeText(this, "fav", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGetFavoriteQuotes() {
+        new DbSelectFavAsyncTask().execute();
     }
 
     class ViewpagerAdapter extends FragmentPagerAdapter {
@@ -192,15 +194,32 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
         }
     }
 
-    public class DbAsyncTask extends AsyncTask<Quote, Void ,Void> {
+    public class DbInsertFavAsyncTask extends AsyncTask<Pair<Context, Quote>, Void ,Void> {
+
         @Override
-        protected Void doInBackground(Quote... quotes) {
-            QuoteDatabase.getInstance(getApplicationContext()).getQuoteDao().insert(quotes[0]);
+        protected Void doInBackground(Pair<Context, Quote>[] pairs) {
+            Context context = pairs[0].first;
+            Quote quote = pairs[0].second;
+            QuoteDatabase.getInstance(context).getQuoteDao().insert(quote);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
+        }
+    }
+
+    public class DbSelectFavAsyncTask extends AsyncTask<Void, Void, List<Quote>> {
+
+        @Override
+        protected List<Quote> doInBackground(Void... voids) {
+//            QuoteDatabase.getInstance()
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<Quote> quote) {
+            favoriteFragment.showQuote(quote);
         }
     }
 }

@@ -98,7 +98,7 @@ public class MainFragment extends Fragment {
             mListener = (OnMainFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener2");
+                    + " must implement OnFavoriteFragmentInteractionListener");
         }
     }
 
