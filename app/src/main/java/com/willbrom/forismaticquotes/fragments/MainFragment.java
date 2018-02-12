@@ -2,33 +2,22 @@ package com.willbrom.forismaticquotes.fragments;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.github.jorgecastilloprz.FABProgressCircle;
-import com.willbrom.forismaticquotes.MainActivity;
 import com.willbrom.forismaticquotes.R;
-import com.willbrom.forismaticquotes.utilities.JsonUtils;
-import com.willbrom.forismaticquotes.utilities.NetworkUtils;
-import com.willbrom.forismaticquotes.utilities.NetworkUtils.VollyCallbackListener;
 
-import java.net.URL;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.willbrom.forismaticquotes.MainActivity.*;
+import butterknife.OnClick;
 
 
 public class MainFragment extends Fragment {
@@ -41,8 +30,8 @@ public class MainFragment extends Fragment {
     TextView quoteTextView;
     @BindView(R.id.quoteAuthor_textView)
     TextView quoteAuthorTextView;
-//    @BindView(R.id.favorite_fab)
-//    FloatingActionButton favFab;
+    @BindView(R.id.heart)
+    ImageView heart;
     @BindView(R.id.quote_cardView)
     CardView quoteCardView;
 
@@ -91,7 +80,7 @@ public class MainFragment extends Fragment {
         titleTextView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/AmaticSC-Bold.ttf"));
     }
 
-
+    @OnClick(R.id.heart)
     void onFavButtonPressed() {
         if (mListener != null) {
             mListener.onClickQuoteFav();

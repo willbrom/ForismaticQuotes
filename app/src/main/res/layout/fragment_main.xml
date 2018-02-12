@@ -55,7 +55,7 @@
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#f1e7dfdf">
+                        android:background="@drawable/fav_bar">
 
                         <ImageView
                             android:id="@+id/heart"

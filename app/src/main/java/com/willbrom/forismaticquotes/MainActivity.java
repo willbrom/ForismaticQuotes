@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     @Override
     public void onClickQuoteFav(String... quote) {
-
+        Toast.makeText(this, "fav", Toast.LENGTH_SHORT).show();
     }
 
     class ViewpagerAdapter extends FragmentPagerAdapter {
