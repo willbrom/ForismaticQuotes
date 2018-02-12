@@ -54,7 +54,7 @@ public class Main2Activity extends AppCompatActivity implements MainFragment.OnM
     }
 
     @Override
-    public void onNextButtonFragmentInteraction(URL url) {
+    public void onClickQuoteFav(String... quote) {
 
     }
 

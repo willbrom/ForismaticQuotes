@@ -41,14 +41,10 @@ public class MainFragment extends Fragment {
     TextView quoteTextView;
     @BindView(R.id.quoteAuthor_textView)
     TextView quoteAuthorTextView;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
 //    @BindView(R.id.favorite_fab)
 //    FloatingActionButton favFab;
     @BindView(R.id.quote_cardView)
     CardView quoteCardView;
-    @BindView(R.id.fab_progressCircle)
-    FABProgressCircle fabProgressCircle;
 
     private String mParam1;
     private String mParam2;
@@ -95,9 +91,10 @@ public class MainFragment extends Fragment {
         titleTextView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/AmaticSC-Bold.ttf"));
     }
 
-    public void onNextButtonPressed(Uri uri) {
+
+    void onFavButtonPressed() {
         if (mListener != null) {
-            mListener.onNextButtonFragmentInteraction(null);
+            mListener.onClickQuoteFav();
         }
     }
 
@@ -125,7 +122,6 @@ public class MainFragment extends Fragment {
     }
 
     public void displayQuote(ArrayList<String> quoteData) {
-        Log.d(TAG, "display Quote");
         if (quoteData != null) {
             quoteTextView.setText(quoteData.get(0));
             if (!quoteData.get(1).equals(""))
@@ -135,8 +131,7 @@ public class MainFragment extends Fragment {
         }
     }
 
-
     public interface OnMainFragmentInteractionListener {
-        void onNextButtonFragmentInteraction(URL url);
+        void onClickQuoteFav(String... quote);
     }
 }

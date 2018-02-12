@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     FloatingActionButton fabNext;
     @BindView(R.id.fab_next_progressCircle)
     FABProgressCircle fabNextProgressCircle;
-    @BindView(R.id.heart)
-    ImageView heart;
+//    @BindView(R.id.heart)
+//    ImageView heart;
     private boolean dataReceived = true;
     private MainFragment mainFragment = new MainFragment();
     private boolean isChecked;
@@ -96,18 +96,18 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 //        }
     }
 
-    @OnClick(R.id.heart)
-    void onClickHeart() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            isChecked = !isChecked;
-            final int[] stateSet = {android.R.attr.state_checked * (isChecked ? 1 : -1)};
-            heart.setImageState(stateSet, true);
-        } else {
-            heart.setImageResource(R.drawable.ic_heart_red);
-        }
-
-        Toast.makeText(this, "hohoho", Toast.LENGTH_SHORT).show();
-    }
+//    @OnClick(R.id.heart)
+//    void onClickHeart() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            isChecked = !isChecked;
+//            final int[] stateSet = {android.R.attr.state_checked * (isChecked ? 1 : -1)};
+//            heart.setImageState(stateSet, true);
+//        } else {
+//            heart.setImageResource(R.drawable.ic_heart_red);
+//        }
+//
+//        Toast.makeText(this, "hohoho", Toast.LENGTH_SHORT).show();
+//    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -131,12 +131,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     }
 
     @Override
-    public void onNextButtonFragmentInteraction(URL url) {}
-
-    @Override
     public void onFragmentInteraction(Uri uri) {}
 
-    public void onClickNextQuote(View view) {
+    @OnClick(R.id.fab_next)
+    void onClickNextQuote() {
         fabNext.setEnabled(false);
         fabNextProgressCircle.show();
         URL url = NetworkUtils.getQuoteUrl("");
@@ -157,6 +155,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
         fabNextProgressCircle.hide();
         fabNext.setEnabled(true);
         Toast.makeText(this, "this is the error " + error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClickQuoteFav(String... quote) {
+
     }
 
     class ViewpagerAdapter extends FragmentPagerAdapter {
