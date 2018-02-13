@@ -1,22 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginRight="@dimen/cardView_side_margin"
+    android:layout_marginLeft="@dimen/cardView_side_margin"
+    android:layout_marginTop="6dp"
+    android:elevation="@dimen/cardview_default_elevation"
+    app:cardCornerRadius="@dimen/cardview_default_radius"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/fav_quote_textView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="@string/quote_text"
-        style="@style/TextAppearance.AppCompat.Medium" />
+        android:padding="12dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/fav_quote_author_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="@string/quote_author"
-        android:layout_marginTop="6dp" />
+        <TextView
+            android:id="@+id/fav_quote_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/quote_text"
+            style="@style/TextAppearance.AppCompat.Medium" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/fav_quote_author_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/quote_author"
+            android:layout_marginTop="6dp" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
