@@ -80,6 +80,7 @@
                             android:paddingLeft="@dimen/textView_padding"
                             android:paddingRight="@dimen/textView_padding"
                             android:textSize="@dimen/quote_text_size"
+                            android:textIsSelectable="true"
                             tools:text="@string/quote_text" />
 
                         <TextView
@@ -90,6 +91,7 @@
                             android:paddingLeft="@dimen/textView_padding"
                             android:paddingRight="@dimen/textView_padding"
                             android:textSize="@dimen/quote_author_text_size"
+                            android:textIsSelectable="true"
                             tools:text="@string/quote_author" />
 
                     </LinearLayout>
