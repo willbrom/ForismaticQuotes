@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +13,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.willbrom.forismaticquotes.R;
+import com.willbrom.forismaticquotes.adapters.FavoriteListAdapter;
 import com.willbrom.forismaticquotes.data.Quote;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,6 +35,11 @@ public class FavoriteFragment extends Fragment {
 
     @BindView(R.id.textView)
     TextView textView;
+    @BindView(R.id.favRecyclerView)
+    RecyclerView favRecyclerView;
+
+    private FavoriteListAdapter adapter;
+    private List<Quote> quoteList = new ArrayList<>();
 
     public FavoriteFragment() {
         // Required empty public constructor
@@ -59,6 +68,9 @@ public class FavoriteFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_favorite, container, false);;
         ButterKnife.bind(this, rootView);
+        adapter = new FavoriteListAdapter();
+        favRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false));
+        favRecyclerView.setAdapter(adapter);
         return rootView;
     }
 
@@ -87,13 +99,15 @@ public class FavoriteFragment extends Fragment {
 
     public void startListener() {
         textView.setText("");
+        adapter.setQuoteList(null);
         mListener.onGetFavoriteQuotes();
     }
 
-    public void showQuote(List<Quote > quote) {
-        if (quote != null) {
-            for (int i = 0; i < quote.size(); i++) {
-                textView.append(quote.get(i).quoteText.toString());
+    public void showQuote(List<Quote> quoteList) {
+        adapter.setQuoteList(quoteList);
+        if (quoteList != null) {
+            for (int i = 0; i < quoteList.size(); i++) {
+                textView.append(quoteList.get(i).quoteText.toString());
             }
         }
     }
