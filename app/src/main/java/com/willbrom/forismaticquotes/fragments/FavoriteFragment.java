@@ -1,6 +1,7 @@
 package com.willbrom.forismaticquotes.fragments;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,8 +34,6 @@ public class FavoriteFragment extends Fragment {
 
     private OnFavoriteFragmentInteractionListener mListener;
 
-    @BindView(R.id.textView)
-    TextView textView;
     @BindView(R.id.favRecyclerView)
     RecyclerView favRecyclerView;
 
@@ -98,18 +97,16 @@ public class FavoriteFragment extends Fragment {
     }
 
     public void startListener() {
-        textView.setText("");
         adapter.setQuoteList(null);
         mListener.onGetFavoriteQuotes();
     }
 
     public void showQuote(List<Quote> quoteList) {
         adapter.setQuoteList(quoteList);
-        if (quoteList != null) {
-            for (int i = 0; i < quoteList.size(); i++) {
-                textView.append(quoteList.get(i).quoteText.toString());
-            }
-        }
+//        if (quoteList != null) {
+//            for (int i = 0; i < quoteList.size(); i++) {
+//            }
+//        }
     }
 
     public interface OnFavoriteFragmentInteractionListener {
