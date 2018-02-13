@@ -1,6 +1,7 @@
 package com.willbrom.forismaticquotes.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,9 +56,19 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
         @BindView(R.id.fav_quote_author_textView)
         TextView favQuoteAuthorTextView;
 
+        private Context context;
+
         public FavoriteItemViewHolder(View itemView) {
             super(itemView);
+            context = itemView.getContext();
             ButterKnife.bind(this, itemView);
+            setCustomFonts();
+        }
+
+        private void setCustomFonts() {
+            favQuoteTextView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Merienda-Bold.ttf"));
+            favQuoteAuthorTextView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Rancho-Regular.ttf"));
+//            titleTextView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/AmaticSC-Bold.ttf"));
         }
     }
 }
