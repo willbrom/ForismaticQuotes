@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnMainFragmentInteractionListener, FavoriteFragment.OnFavoriteFragmentInteractionListener, NetworkUtils.VollyCallbackListener {
+public class MainActivity extends AppCompatActivity implements MainFragment.OnMainFragmentInteractionListener, FavoriteFragment.OnFavoriteFragmentInteractionListener, NetworkUtils.VollyCallbackListener, ViewPager.OnPageChangeListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String QUOTE_KEY = "quote_key";
@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 //            dataReceived = savedInstanceState.getBoolean(DATA_RECEIVED_KEY);
 //        }
 
+        viewPager.addOnPageChangeListener(this);
         setSupportActionBar(toolbar);
         setupViewHolder(viewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -162,7 +163,24 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     @Override
     public void onGetFavoriteQuotes() {
-        new DbSelectFavAsyncTask().execute();
+        new DbSelectFavAsyncTask().execute(this);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        Log.d(TAG, "This be the position: " + position);
+        if (position == 1)
+            favoriteFragment.startListener();
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 
     class ViewpagerAdapter extends FragmentPagerAdapter {
@@ -209,12 +227,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
         }
     }
 
-    public class DbSelectFavAsyncTask extends AsyncTask<Void, Void, List<Quote>> {
+    public class DbSelectFavAsyncTask extends AsyncTask<Context, Void, List<Quote>> {
 
         @Override
-        protected List<Quote> doInBackground(Void... voids) {
-//            QuoteDatabase.getInstance()
-            return null;
+        protected List<Quote> doInBackground(Context... context) {
+            return QuoteDatabase.getInstance(context[0]).getQuoteDao().getAllQuotes();
         }
 
         @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import butterknife.ButterKnife;
 public class FavoriteFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = FavoriteFragment.class.getSimpleName();
 
     private String mParam1;
     private String mParam2;
@@ -57,7 +59,6 @@ public class FavoriteFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_favorite, container, false);;
         ButterKnife.bind(this, rootView);
-        mListener.onGetFavoriteQuotes();
         return rootView;
     }
 
@@ -84,9 +85,17 @@ public class FavoriteFragment extends Fragment {
         mListener = null;
     }
 
+    public void startListener() {
+        textView.setText("");
+        mListener.onGetFavoriteQuotes();
+    }
+
     public void showQuote(List<Quote > quote) {
-        if (quote != null)
-            textView.setText(quote.get(0).quoteText);
+        if (quote != null) {
+            for (int i = 0; i < quote.size(); i++) {
+                textView.append(quote.get(i).quoteText.toString());
+            }
+        }
     }
 
     public interface OnFavoriteFragmentInteractionListener {
