@@ -1,7 +1,6 @@
 package com.willbrom.forismaticquotes;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     ViewPager viewPager;
     @BindView(R.id.fab_next)
     FloatingActionButton fabNext;
+    @BindView(R.id.fab_share)
+    FloatingActionButton fabShare;
     @BindView(R.id.fab_next_progressCircle)
     FABProgressCircle fabNextProgressCircle;
 //    @BindView(R.id.heart)
@@ -140,12 +142,29 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
         NetworkUtils.getHttpResponse(this, this, url);
     }
 
+    @OnClick(R.id.fab_share)
+    void onClickShare() {
+        if (quoteData != null) {
+            ShareCompat.IntentBuilder.from(this)
+                    .setChooserTitle("Quote")
+                    .setType("text/plain")
+                    .setText(quoteData.get(0) + "- " + getAuthor(quoteData.get(1))).startChooser();
+        }
+    }
+
+    private String getAuthor(String author) {
+        if (!author.equals(""))
+            return author;
+        return "Unknown";
+    }
+
     @Override
     public void onSuccess(String response) {
         fabNext.setEnabled(true);
         fabNextProgressCircle.hide();
+        quoteData = JsonUtils.parseJson(response);
         if (mainFragment != null)
-            mainFragment.displayQuote(JsonUtils.parseJson(response));
+            mainFragment.displayQuote(quoteData);
     }
 
     @Override
