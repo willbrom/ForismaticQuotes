@@ -73,6 +73,7 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, rootView);
+        heart.setVisibility(View.GONE);
         context = getActivity();
         setCustomFonts();
         return rootView;
@@ -92,7 +93,6 @@ public class MainFragment extends Fragment {
             String quoteAuthor = quoteAuthorTextView.getText().toString();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            isChecked = !isChecked;
                 final int[] stateSet = {android.R.attr.state_checked * (true ? 1 : -1)};
                 heart.setImageState(stateSet, true);
             } else {
@@ -108,11 +108,10 @@ public class MainFragment extends Fragment {
     public void resetHeart() {
         isFavorite = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            isChecked = !isChecked;
             final int[] stateSet = {android.R.attr.state_checked * (false ? 1 : -1)};
             heart.setImageState(stateSet, true);
         } else {
-            heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            heart.setImageResource(R.drawable.ic_heart_empty);
         }
     }
 
@@ -141,6 +140,7 @@ public class MainFragment extends Fragment {
 
     public void displayQuote(ArrayList<String> quoteData) {
         if (quoteData != null) {
+            heart.setVisibility(View.VISIBLE);
             quoteTextView.setText(quoteData.get(0));
             if (!quoteData.get(1).equals(""))
                 quoteAuthorTextView.setText(quoteData.get(1));

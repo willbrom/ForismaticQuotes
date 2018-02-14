@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
@@ -72,12 +73,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-//        if (savedInstanceState != null) {
-//            quoteTextView.setText(savedInstanceState.getString(QUOTE_KEY));
-//            quoteAuthorTextView.setText(savedInstanceState.getString(QUOTE_AUTHOR_KEY));
-//            dataReceived = savedInstanceState.getBoolean(DATA_RECEIVED_KEY);
-//        }
-
         viewPager.addOnPageChangeListener(this);
         setSupportActionBar(toolbar);
         setupViewHolder(viewPager);
@@ -94,37 +89,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     private void setTabIcon() {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_home_white_24px);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_favorite_white_24px);
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-//        if (hasFocus) {
-//            if (dataReceived)
-//                fabProgressCircle.clearFocus();
-//            else
-//                fabProgressCircle.show();
-//        }
-    }
-
-//    @OnClick(R.id.heart)
-//    void onClickHeart() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            isChecked = !isChecked;
-//            final int[] stateSet = {android.R.attr.state_checked * (isChecked ? 1 : -1)};
-//            heart.setImageState(stateSet, true);
-//        } else {
-//            heart.setImageResource(R.drawable.ic_heart_red);
-//        }
-//
-//        Toast.makeText(this, "hohoho", Toast.LENGTH_SHORT).show();
-//    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-//        outState.putString(QUOTE_KEY, quoteTextView.getText().toString());
-//        outState.putString(QUOTE_AUTHOR_KEY, quoteAuthorTextView.getText().toString());
-//        outState.putBoolean(DATA_RECEIVED_KEY, dataReceived);
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -190,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
         isLoading = false;
         resetFab();
         Snackbar.make(parentViewGroup, getString(R.string.no_internet_con), Snackbar.LENGTH_SHORT).show();
-//        Toast.makeText(this, "this is the error " + error, Toast.LENGTH_SHORT).show();
     }
 
     private void resetFab() {
@@ -239,9 +202,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     private void hideFab(boolean hide) {
         if (hide) {
-            fabNextProgressCircle.hide();
+            fabNextProgressCircle.setVisibility(View.INVISIBLE);
             fabNext.hide();
         } else {
+            fabNextProgressCircle.setVisibility(View.VISIBLE);
             if (isLoading)
                 fabNextProgressCircle.show();
             fabNext.show();
