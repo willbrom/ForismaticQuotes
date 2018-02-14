@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.willbrom.forismaticquotes.R;
@@ -20,6 +21,16 @@ import butterknife.ButterKnife;
 public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapter.FavoriteItemViewHolder> {
 
     private List<Quote> quoteList;
+    private OnFavoriteItemListener mListener;
+
+    public interface OnFavoriteItemListener {
+        void onClickUnFavorite(Quote quote);
+        void onClickShare(Quote quote);
+    }
+
+    public FavoriteListAdapter(OnFavoriteItemListener listener) {
+        mListener = listener;
+    }
 
     @Override
     public FavoriteItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -29,13 +40,29 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
     }
 
     @Override
-    public void onBindViewHolder(FavoriteItemViewHolder holder, int position) {
-        Context context = holder.itemView.getContext();
-        String quoteText = quoteList.get(position).quoteText;
-        String quoteAuthor = quoteList.get(position).quoteAuthor;
+    public void onBindViewHolder(final FavoriteItemViewHolder holder, final int position) {
+        final Quote quote = quoteList.get(position);
+        String quoteText = quote.quoteText;
+        String quoteAuthor = quote.quoteAuthor;
 
         holder.favQuoteTextView.setText(quoteText);
         holder.favQuoteAuthorTextView.setText(quoteAuthor);
+
+        holder.heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null)
+                    mListener.onClickUnFavorite(quote);
+            }
+        });
+
+        holder.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null)
+                    mListener.onClickShare(quote);
+            }
+        });
     }
 
     @Override
@@ -55,6 +82,10 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
         TextView favQuoteTextView;
         @BindView(R.id.fav_quote_author_textView)
         TextView favQuoteAuthorTextView;
+        @BindView(R.id.heart)
+        ImageView heart;
+        @BindView(R.id.share_imageView)
+        ImageView share;
 
         private Context context;
 

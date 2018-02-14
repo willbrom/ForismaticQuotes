@@ -25,7 +25,7 @@
                 android:id="@+id/heart"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                app:srcCompat="@drawable/ic_heart_red"
+                app:srcCompat="@drawable/avd_trimclip_heart_break"
                 android:layout_marginRight="6dp"
                 android:layout_gravity="right|top" />
 
@@ -44,25 +44,12 @@
                 tools:text="@string/quote_text"
                 style="@style/TextAppearance.AppCompat.Medium" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/fav_quote_author_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="@string/quote_author"
-                    android:layout_marginTop="6dp" />
-
-                <ImageView
-                    android:id="@+id/share_imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_share_black_18px"
-                    android:layout_gravity="right|center_vertical" />
-
-            </FrameLayout>
+            <TextView
+                android:id="@+id/fav_quote_author_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/quote_author"
+                android:layout_marginTop="6dp" />
 
         </LinearLayout>
 

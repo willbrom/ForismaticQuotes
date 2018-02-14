@@ -1,17 +1,16 @@
 package com.willbrom.forismaticquotes.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Typeface;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.willbrom.forismaticquotes.R;
 import com.willbrom.forismaticquotes.adapters.FavoriteListAdapter;
@@ -24,7 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class FavoriteFragment extends Fragment {
+public class FavoriteFragment extends Fragment implements FavoriteListAdapter.OnFavoriteItemListener {
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG = FavoriteFragment.class.getSimpleName();
@@ -67,7 +67,7 @@ public class FavoriteFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_favorite, container, false);;
         ButterKnife.bind(this, rootView);
-        adapter = new FavoriteListAdapter();
+        adapter = new FavoriteListAdapter(this);
         favRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false));
         favRecyclerView.setAdapter(adapter);
         return rootView;
@@ -97,19 +97,48 @@ public class FavoriteFragment extends Fragment {
     }
 
     public void startListener() {
-        adapter.setQuoteList(null);
-        mListener.onGetFavoriteQuotes();
+        if (adapter != null)
+            adapter.setQuoteList(null);
+        if (mListener != null)
+            mListener.onGetFavoriteQuotes();
     }
 
     public void showQuote(List<Quote> quoteList) {
-        adapter.setQuoteList(quoteList);
-//        if (quoteList != null) {
-//            for (int i = 0; i < quoteList.size(); i++) {
-//            }
-//        }
+        if (adapter != null)
+            adapter.setQuoteList(quoteList);
+    }
+
+    @Override
+    public void onClickUnFavorite(final Quote quote) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setMessage("Discard favorite?")
+                .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (mListener != null)
+                            mListener.onDeleteFavoriteQuote(quote);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+        builder.show();
+    }
+
+    @Override
+    public void onClickShare(Quote quote) {
+        if (mListener != null)
+            mListener.onShareFavoriteQuote(quote);
     }
 
     public interface OnFavoriteFragmentInteractionListener {
         void onGetFavoriteQuotes();
+        void onDeleteFavoriteQuote(Quote quote);
+        void onShareFavoriteQuote(Quote quote);
     }
 }

@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
+            app:titleTextColor="@color/white"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <android.support.design.widget.TabLayout
@@ -57,18 +58,5 @@
             app:pressedTranslationZ="0dp" />
 
     </com.github.jorgecastilloprz.FABProgressCircle>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fabSize="mini"
-        app:backgroundTint="#809f3b"
-        app:srcCompat="@android:drawable/ic_menu_share"
-        app:elevation="@dimen/fab_elevation"
-        app:pressedTranslationZ="@dimen/fab_pressed_elevation"
-        android:layout_gravity="bottom|left"
-        android:layout_marginLeft="@dimen/fab_edge_margin"
-        android:layout_marginBottom="@dimen/fab_edge_margin" />
 
 </android.support.design.widget.CoordinatorLayout>

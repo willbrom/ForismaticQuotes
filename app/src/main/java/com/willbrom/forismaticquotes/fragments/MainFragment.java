@@ -86,30 +86,33 @@ public class MainFragment extends Fragment {
 
     @OnClick(R.id.heart)
     void onFavButtonPressed() {
-        isFavorite = true;
-        String quote = quoteTextView.getText().toString();
-        String quoteAuthor = quoteAuthorTextView.getText().toString();
+        if (!isFavorite) {
+            isFavorite = true;
+            String quote = quoteTextView.getText().toString();
+            String quoteAuthor = quoteAuthorTextView.getText().toString();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            isChecked = !isChecked;
-            final int[] stateSet = {android.R.attr.state_checked * (true ? 1 : -1)};
-            heart.setImageState(stateSet, true);
-        } else {
-            heart.setImageResource(R.drawable.ic_heart_red);
-        }
+                final int[] stateSet = {android.R.attr.state_checked * (true ? 1 : -1)};
+                heart.setImageState(stateSet, true);
+            } else {
+                heart.setImageResource(R.drawable.ic_heart_red);
+            }
 
-        if (mListener != null) {
-            mListener.onClickQuoteFav(new Quote(quote, quoteAuthor));
+            if (mListener != null) {
+                mListener.onClickQuoteFav(new Quote(quote, quoteAuthor));
+            }
         }
     }
 
     public void resetHeart() {
+        isFavorite = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            isChecked = !isChecked;
             final int[] stateSet = {android.R.attr.state_checked * (false ? 1 : -1)};
             heart.setImageState(stateSet, true);
         } else {
-            heart.setImageResource(R.drawable.ic_heart_empty);
+            heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
     }
 

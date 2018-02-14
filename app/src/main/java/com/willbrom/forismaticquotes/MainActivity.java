@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -55,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     ViewPager viewPager;
     @BindView(R.id.fab_next)
     FloatingActionButton fabNext;
-    @BindView(R.id.fab_share)
-    FloatingActionButton fabShare;
     @BindView(R.id.fab_next_progressCircle)
     FABProgressCircle fabNextProgressCircle;
 //    @BindView(R.id.heart)
@@ -86,8 +85,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     }
 
     private void setTabIcon() {
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_school_black_24dp);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_favorite_black_24dp);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_home_white_24px);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_favorite_white_24px);
     }
 
     @Override
@@ -124,7 +123,17 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_share:
+                onShare(quoteData);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupViewHolder(ViewPager viewPager) {
@@ -136,7 +145,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     @OnClick(R.id.fab_next)
     void onClickNextQuote() {
-        mainFragment.resetHeart();
         fabNext.setEnabled(false);
         fabNextProgressCircle.show();
         URL url = NetworkUtils.getQuoteUrl("");
@@ -144,8 +152,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
         NetworkUtils.getHttpResponse(this, this, url);
     }
 
-    @OnClick(R.id.fab_share)
-    void onClickShare() {
+    private void onShare(List<String> quoteData) {
         if (quoteData != null) {
             ShareCompat.IntentBuilder.from(this)
                     .setChooserTitle("Quote")
@@ -162,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     @Override
     public void onSuccess(String response) {
+        mainFragment.resetHeart();
         fabNext.setEnabled(true);
         fabNextProgressCircle.hide();
         quoteData = JsonUtils.parseJson(response);
@@ -188,6 +196,19 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     }
 
     @Override
+    public void onDeleteFavoriteQuote(Quote quote) {
+        new DbDeleteFavAsyncTask().execute(new Pair<Context, Quote>(this, quote));
+    }
+
+    @Override
+    public void onShareFavoriteQuote(Quote quote) {
+        List<String> quoteDate = new ArrayList<>();
+        quoteDate.add(quote.quoteText);
+        quoteDate.add(quote.quoteAuthor);
+        onShare(quoteDate);
+    }
+
+    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
@@ -198,17 +219,16 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
         if (position == 1) {
             hideFabs(true);
             favoriteFragment.startListener();
-        } else
+        } else {
             hideFabs(false);
+        }
     }
 
     private void hideFabs(boolean hide) {
         if (hide) {
-            fabNext.setVisibility(View.GONE);
-            fabShare.setVisibility(View.GONE);
+            fabNext.hide();
         } else {
-            fabNext.setVisibility(View.VISIBLE);
-            fabShare.setVisibility(View.VISIBLE);
+            fabNext.show();
         }
     }
 
@@ -246,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
         }
     }
 
-    public class DbInsertFavAsyncTask extends AsyncTask<Pair<Context, Quote>, Void ,Void> {
+    public class DbInsertFavAsyncTask extends AsyncTask<Pair<Context, Quote>, Void , Void> {
 
         @Override
         protected Void doInBackground(Pair<Context, Quote>[] pairs) {
@@ -271,6 +291,22 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
         @Override
         protected void onPostExecute(List<Quote> quote) {
             favoriteFragment.showQuote(quote);
+        }
+    }
+
+    public class DbDeleteFavAsyncTask extends AsyncTask<Pair<Context, Quote>, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Pair<Context, Quote>[] pairs) {
+            Context context = pairs[0].first;
+            Quote quote = pairs[0].second;
+            QuoteDatabase.getInstance(context).getQuoteDao().delete(quote);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            favoriteFragment.startListener();
         }
     }
 }
