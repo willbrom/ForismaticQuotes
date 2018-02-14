@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
             case R.id.item_share:
                 onShare(quoteData);
                 return true;
+            case R.id.item_info:
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     @Override
     public void onSuccess(String response) {
+        Log.d(TAG, response);
         isLoading = false;
         resetFab();
         mainFragment.resetHeart();

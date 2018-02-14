@@ -83,16 +83,23 @@
                             android:textIsSelectable="true"
                             android:text="@string/initial_quote" />
 
-                        <TextView
-                            android:id="@+id/quoteAuthor_textView"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:paddingLeft="@dimen/textView_padding"
-                            android:paddingRight="@dimen/textView_padding"
-                            android:textSize="@dimen/quote_author_text_size"
-                            android:textIsSelectable="true"
-                            android:text="@string/initial_author" />
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/quoteAuthor_textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:paddingLeft="@dimen/textView_padding"
+                                android:paddingRight="@dimen/textView_padding"
+                                android:textSize="@dimen/quote_author_text_size"
+                                android:textIsSelectable="true"
+                                android:text="@string/initial_author" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 

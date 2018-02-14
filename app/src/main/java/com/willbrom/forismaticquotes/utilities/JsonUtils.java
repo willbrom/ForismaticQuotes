@@ -14,6 +14,7 @@ public class JsonUtils {
             JSONObject jsonObject = new JSONObject(rawJson);
             quoteData.add(jsonObject.getString("quoteText"));
             quoteData.add(jsonObject.getString("quoteAuthor"));
+            quoteData.add(jsonObject.getString("quoteLink"));
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
