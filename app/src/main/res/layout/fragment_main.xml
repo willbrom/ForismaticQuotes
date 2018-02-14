@@ -61,7 +61,7 @@
                             android:id="@+id/heart"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
-                            app:srcCompat="@drawable/ic_favorite_border_black_24dp"
+                            app:srcCompat="@drawable/ic_heart_empty"
                             android:layout_marginRight="6dp"
                             android:layout_gravity="right|top" />
 
@@ -81,7 +81,7 @@
                             android:paddingRight="@dimen/textView_padding"
                             android:textSize="@dimen/quote_text_size"
                             android:textIsSelectable="true"
-                            tools:text="@string/quote_text" />
+                            android:text="@string/initial_quote" />
 
                         <TextView
                             android:id="@+id/quoteAuthor_textView"
@@ -92,7 +92,7 @@
                             android:paddingRight="@dimen/textView_padding"
                             android:textSize="@dimen/quote_author_text_size"
                             android:textIsSelectable="true"
-                            tools:text="@string/quote_author" />
+                            android:text="@string/initial_author" />
 
                     </LinearLayout>
 

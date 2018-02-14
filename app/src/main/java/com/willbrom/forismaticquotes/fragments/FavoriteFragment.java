@@ -112,8 +112,8 @@ public class FavoriteFragment extends Fragment implements FavoriteListAdapter.On
     public void onClickUnFavorite(final Quote quote) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setMessage("Discard favorite?")
-                .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+        builder.setMessage("Remove favorite?")
+                .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (mListener != null)

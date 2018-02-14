@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     private MainFragment mainFragment = new MainFragment();
     private FavoriteFragment favoriteFragment = new FavoriteFragment();
     private boolean isChecked;
+    private boolean isLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
         setupViewHolder(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         setTabIcon();
+        initializeQuoteData();
+    }
+
+    private void initializeQuoteData() {
+        quoteData.add(getString(R.string.initial_quote));
+        quoteData.add(getString(R.string.initial_author));
     }
 
     private void setTabIcon() {
@@ -145,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     @OnClick(R.id.fab_next)
     void onClickNextQuote() {
+        isLoading = true;
         fabNext.setEnabled(false);
         fabNextProgressCircle.show();
         URL url = NetworkUtils.getQuoteUrl("");
@@ -169,9 +177,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     @Override
     public void onSuccess(String response) {
+        isLoading = false;
+        resetFab();
         mainFragment.resetHeart();
-        fabNext.setEnabled(true);
-        fabNextProgressCircle.hide();
         quoteData = JsonUtils.parseJson(response);
         if (mainFragment != null)
             mainFragment.displayQuote(quoteData);
@@ -179,15 +187,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     @Override
     public void onFailure(String error) {
+        isLoading = false;
+        resetFab();
+        Snackbar.make(parentViewGroup, getString(R.string.no_internet_con), Snackbar.LENGTH_SHORT).show();
+//        Toast.makeText(this, "this is the error " + error, Toast.LENGTH_SHORT).show();
+    }
+
+    private void resetFab() {
         fabNextProgressCircle.hide();
         fabNext.setEnabled(true);
-        Toast.makeText(this, "this is the error " + error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onClickQuoteFav(Quote... quote) {
         new DbInsertFavAsyncTask().execute(new Pair(this, quote[0]));
-        Toast.makeText(this, "fav", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -217,17 +230,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     public void onPageSelected(int position) {
         Log.d(TAG, "This be the position: " + position);
         if (position == 1) {
-            hideFabs(true);
+            hideFab(true);
             favoriteFragment.startListener();
         } else {
-            hideFabs(false);
+            hideFab(false);
         }
     }
 
-    private void hideFabs(boolean hide) {
+    private void hideFab(boolean hide) {
         if (hide) {
+            fabNextProgressCircle.hide();
             fabNext.hide();
         } else {
+            if (isLoading)
+                fabNextProgressCircle.show();
             fabNext.show();
         }
     }

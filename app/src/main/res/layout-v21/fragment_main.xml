@@ -81,7 +81,7 @@
                             android:paddingRight="@dimen/textView_padding"
                             android:textSize="@dimen/quote_text_size"
                             android:textIsSelectable="true"
-                            tools:text="@string/quote_text" />
+                            android:text="@string/initial_quote" />
 
                         <TextView
                             android:id="@+id/quoteAuthor_textView"
@@ -92,7 +92,7 @@
                             android:paddingRight="@dimen/textView_padding"
                             android:textSize="@dimen/quote_author_text_size"
                             android:textIsSelectable="true"
-                            tools:text="@string/quote_author" />
+                            android:text="@string/initial_author" />
 
                     </LinearLayout>
 

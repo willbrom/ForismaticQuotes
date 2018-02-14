@@ -40,7 +40,7 @@
         android:id="@+id/fab_next_progressCircle"
         android:layout_width="62dp"
         android:layout_height="62dp"
-        app:arcColor="#db6a32ed"
+        app:arcColor="#ebed3280"
         app:arcWidth="2dp"
         app:roundedStroke="true"
         android:layout_marginBottom="@dimen/fab_edge_margin"
