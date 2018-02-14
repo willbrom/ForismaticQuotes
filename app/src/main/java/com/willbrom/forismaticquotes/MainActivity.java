@@ -1,6 +1,8 @@
 package com.willbrom.forismaticquotes;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +21,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
@@ -104,9 +108,32 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
                 onShare(quoteData);
                 return true;
             case R.id.item_info:
+                showInfoDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showInfoDialog() {
+        final Dialog infoDialog = new Dialog(this);
+        infoDialog.setContentView(R.layout.dialog_info);
+        infoDialog.setTitle(getString(R.string.info_dialog_title));
+
+        TextView infoText = (TextView) infoDialog.findViewById(R.id.info_textView);
+        TextView infoText1 = (TextView) infoDialog.findViewById(R.id.info_textView1);
+
+        infoText.setTypeface(Typeface.createFromAsset(this.getAssets(), "fonts/JustAnotherHand-Regular.ttf"));
+        infoText1.setTypeface(Typeface.createFromAsset(this.getAssets(), "fonts/JustAnotherHand-Regular.ttf"));
+
+        Button cancelBtn = (Button) infoDialog.findViewById(R.id.cancel_btn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                infoDialog.dismiss();
+            }
+        });
+
+        infoDialog.show();
     }
 
     private void setupViewHolder(ViewPager viewPager) {
