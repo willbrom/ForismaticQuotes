@@ -2,6 +2,7 @@ package com.willbrom.forismaticquotes.fragments;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -40,6 +41,7 @@ public class MainFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Context context;
+    private boolean isFavorite;
 
     private OnMainFragmentInteractionListener mListener;
     private static final String TAG = MainFragment.class.getSimpleName();
@@ -84,10 +86,30 @@ public class MainFragment extends Fragment {
 
     @OnClick(R.id.heart)
     void onFavButtonPressed() {
+        isFavorite = true;
         String quote = quoteTextView.getText().toString();
         String quoteAuthor = quoteAuthorTextView.getText().toString();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            isChecked = !isChecked;
+            final int[] stateSet = {android.R.attr.state_checked * (true ? 1 : -1)};
+            heart.setImageState(stateSet, true);
+        } else {
+            heart.setImageResource(R.drawable.ic_heart_red);
+        }
+
         if (mListener != null) {
             mListener.onClickQuoteFav(new Quote(quote, quoteAuthor));
+        }
+    }
+
+    public void resetHeart() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            isChecked = !isChecked;
+            final int[] stateSet = {android.R.attr.state_checked * (false ? 1 : -1)};
+            heart.setImageState(stateSet, true);
+        } else {
+            heart.setImageResource(R.drawable.ic_heart_empty);
         }
     }
 

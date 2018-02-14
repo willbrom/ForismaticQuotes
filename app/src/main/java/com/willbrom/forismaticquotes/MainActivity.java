@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
@@ -135,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     @OnClick(R.id.fab_next)
     void onClickNextQuote() {
+        mainFragment.resetHeart();
         fabNext.setEnabled(false);
         fabNextProgressCircle.show();
         URL url = NetworkUtils.getQuoteUrl("");
@@ -193,8 +195,21 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     @Override
     public void onPageSelected(int position) {
         Log.d(TAG, "This be the position: " + position);
-        if (position == 1)
+        if (position == 1) {
+            hideFabs(true);
             favoriteFragment.startListener();
+        } else
+            hideFabs(false);
+    }
+
+    private void hideFabs(boolean hide) {
+        if (hide) {
+            fabNext.setVisibility(View.GONE);
+            fabShare.setVisibility(View.GONE);
+        } else {
+            fabNext.setVisibility(View.VISIBLE);
+            fabShare.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
