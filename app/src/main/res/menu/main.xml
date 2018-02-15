@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/item_share"
-        android:orderInCategory="2"
-        android:title="@string/menu_share"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_share_white_24px" />
+    <!--<item-->
+        <!--android:id="@+id/item_share"-->
+        <!--android:orderInCategory="2"-->
+        <!--android:title="@string/menu_share"-->
+        <!--app:showAsAction="always"-->
+        <!--android:icon="@drawable/ic_share_white_24px" />-->
 
     <item
         android:id="@+id/item_info"
         android:orderInCategory="1"
         android:title="@string/menu_share"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/ic_info_white_24px" />
 
 </menu>

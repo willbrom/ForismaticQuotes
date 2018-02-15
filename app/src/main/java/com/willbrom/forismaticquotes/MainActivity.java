@@ -104,9 +104,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.item_share:
-                onShare(quoteData);
-                return true;
+//            case R.id.item_share:
+//                onShare(quoteData);
+//                return true;
             case R.id.item_info:
                 showInfoDialog();
                 return true;
@@ -194,6 +194,14 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     @Override
     public void onClickQuoteFav(Quote... quote) {
         new DbInsertFavAsyncTask().execute(new Pair(this, quote[0]));
+    }
+
+    @Override
+    public void onClickShare(Quote... quote) {
+        List<String> quoteData = new ArrayList<>();
+        quoteData.add(quote[0].quoteText);
+        quoteData.add(quote[0].quoteAuthor);
+        onShare(quoteData);
     }
 
     @Override

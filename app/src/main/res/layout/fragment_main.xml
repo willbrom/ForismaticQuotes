@@ -83,10 +83,9 @@
                             android:textIsSelectable="true"
                             android:text="@string/initial_quote" />
 
-                        <LinearLayout
+                        <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_height="wrap_content">
 
                             <TextView
                                 android:id="@+id/quoteAuthor_textView"
@@ -99,7 +98,14 @@
                                 android:textIsSelectable="true"
                                 android:text="@string/initial_author" />
 
-                        </LinearLayout>
+                            <ImageView
+                                android:id="@+id/share_imageView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_share_black_24px"
+                                android:layout_gravity="right|center_vertical" />
+
+                        </FrameLayout>
 
                     </LinearLayout>
 

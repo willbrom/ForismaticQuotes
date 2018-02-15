@@ -35,6 +35,8 @@ public class MainFragment extends Fragment {
     TextView quoteAuthorTextView;
     @BindView(R.id.heart)
     ImageView heart;
+    @BindView(R.id.share_imageView)
+    ImageView share;
     @BindView(R.id.quote_cardView)
     CardView quoteCardView;
 
@@ -105,6 +107,15 @@ public class MainFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.share_imageView)
+    void onClickShare() {
+        String quote = quoteTextView.getText().toString();
+        String quoteAuthor = quoteAuthorTextView.getText().toString();
+
+        if (mListener != null)
+            mListener.onClickShare(new Quote(quote, quoteAuthor));
+    }
+
     public void resetHeart() {
         isFavorite = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -151,5 +162,6 @@ public class MainFragment extends Fragment {
 
     public interface OnMainFragmentInteractionListener {
         void onClickQuoteFav(Quote... quote);
+        void onClickShare(Quote... quote);
     }
 }

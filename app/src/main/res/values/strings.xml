@@ -11,9 +11,10 @@
 
     <!-- dialog -->
     <string name="cancel_text">Cancel</string>
-    <string name="info_text">All credit for the quote\'s goes to forismatic.com. </string>
-    <string name="info_dialog_title">About me</string>
-    <string name="info_text1">This app is dedicated to Kamran.</string>
+    <string name="info_text">All credit for the quote\'s in this app goes to forismatic.com</string>
+    <string name="link">forismatic.com</string>
+    <string name="info_dialog_title">About Ispirazione</string>
+    <string name="info_text1">This app is dedicated to Kamran Ali.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
